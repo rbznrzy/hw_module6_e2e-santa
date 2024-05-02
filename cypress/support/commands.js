@@ -32,3 +32,24 @@ Cypress.Commands.add("login", (userName, password) => {
   cy.get(loginPage.passwordField).type(password);
   cy.get(generalElements.submitButton).click({ force: true });
 });
+
+Cypress.Commands.add("deletingBox", (boxId) => {
+    cy.request({
+        method: "POST",
+        url: "api/login?redirect=%2F",
+        body: {
+            email: "rbznrzy.testing@gmail.com",
+            password: "QC1069",
+        },
+    }).then((response) => {
+      const requestCookie = response.headers['Cookie']
+        const responseCookie = response.headers['set-cookie'];
+        cy.request({
+          method: "DELETE",
+          url: `/api/box/${boxId}`,
+          headers: {
+            Authorization: `${responseCookie}; ${requestCookie}`
+          }
+      });
+    });
+});

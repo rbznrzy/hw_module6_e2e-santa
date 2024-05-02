@@ -4,6 +4,8 @@
   "description": "",
   "main": "cypress.config.js",
   "scripts": {
+    "npm i": "npm install",
+    "cy:open": "npx cypress open",
     "cy:run": "cypress run"
   },
   "author": "",
