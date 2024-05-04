@@ -1,3 +1,5 @@
 {
-  "inviteLink": ":nth-child(2) > .form-page-group__main b"
+  "inviteLink": ":nth-child(2) > .form-page-group__main b",
+  "participantInput": "frm-wrapper",
+  "boxesButton": "section.layout-1__header-wrapper-fixed > header > section > div > div > a:nth-child(1)"
 }

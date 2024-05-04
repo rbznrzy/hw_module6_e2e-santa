@@ -1,3 +1,7 @@
 {
-  "createdBoxName": ".layout-1__header-wrapper-fixed .txt-h3--max-1-lines"
+  "createdBoxName": ".layout-1__header-wrapper-fixed .txt-h3--max-1-lines",
+  "greenTip": ".tip",
+  "drawModal": ".santa-modal_content",
+  "drawSuccessLayer": ".picture-notice",
+  "drawLink": ".txt-secondary--med.txt--orange"
 }

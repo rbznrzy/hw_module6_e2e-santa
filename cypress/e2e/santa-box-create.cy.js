@@ -20,20 +20,22 @@ describe("user can create a box and run it", () => {
   //пользователь 1 логинится
   //пользователь 1 запускает жеребьевку
   let newBoxName = faker.word.noun({ length: { min: 5, max: 10 } });
-  let wishes = faker.word.noun() + faker.word.adverb() + faker.word.adjective();
   let maxAmount = faker.random.numeric(3);
   let currency = "Евро";
   let inviteLink;
   let boxId;
+  let i;
 
   it("user logins and create a box", () => {
     cy.visit("login");
     cy.login(users.userAutor.email, users.userAutor.password);
     cy.contains("Создать коробку").click();
     cy.get(boxPage.boxNameField).type(newBoxName);
-    cy.get(boxPage.idField).invoke('attr', 'value').then((text) => {
-      boxId = text;
-    });
+    cy.get(boxPage.idField)
+      .invoke("attr", "value")
+      .then((text) => {
+        boxId = text;
+      });
     cy.get(generalElements.arrowRight).click();
     cy.get(boxPage.sixthIcon).click();
     cy.get(generalElements.arrowRight).click();
@@ -62,26 +64,36 @@ describe("user can create a box and run it", () => {
       });
     cy.clearCookies();
   });
-  it("approve as user1", () => {
+
+  it("adding participants", () => {
+    for (let i = 1; i < 4; i++) { 
     cy.visit(inviteLink);
-    cy.get(generalElements.submitButton).click();
-    cy.contains("войдите").click();
-    cy.login(users.user1.email, users.user1.password);
-    cy.contains("Создать карточку участника").should("exist");
-    cy.get(generalElements.submitButton).click();
-    cy.get(generalElements.arrowRight).click();
-    cy.get(generalElements.arrowRight).click();
-    cy.get(inviteeBoxPage.wishesInput).type(wishes);
-    cy.get(generalElements.arrowRight).click();
-    cy.get(inviteeDashboardPage.noticeForInvitee)
+    cy.inviteLinkAddingParticipant(i);
+    cy.clearCookies();
+  }
+  });
+
+  it('draw', () => {
+    cy.visit("login");
+    cy.login(users.userAutor.email, users.userAutor.password);
+    cy.get(invitePage.boxesButton).click();
+    cy.contains(boxId).click();
+    cy.get(dashboardPage.greenTip)
       .invoke("text")
       .then((text) => {
-        expect(text).to.contain("Это — анонимный чат с вашим Тайным Сантой");
-      });
-    cy.clearCookies();
+        expect(text).to.include("В коробке уже достаточно участников для проведения жеребьевки.");
+    })
+    cy.get(dashboardPage.drawLink).click();
+    cy.get(generalElements.submitButton).click();
+    cy.get(generalElements.submitButton).click();
+    cy.get(dashboardPage.drawSuccessLayer)
+      .invoke("text")
+      .then((text) => {
+        expect(text).to.include("Жеребьевка проведена");
+  })
   });
-    after("delete box", () => {
-      cy.deletingBox(boxId)
-      });
-      
+
+  after("delete box", () => {
+    cy.deletingBox(boxId);
   });
+});
